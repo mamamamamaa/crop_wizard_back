@@ -5,7 +5,7 @@ const { httpError } = require("../middlewares");
 const { ctrlWallpaper, verificationMessage, sendMail } = require("../helpres");
 const { generateAccessToken } = require("../helpres/token");
 
-const { EXPIRES_IN } = process.env;
+const { EXPIRES_IN, CLIENT_URL } = process.env;
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -67,6 +67,24 @@ const register = async (req, res, next) => {
   });
 };
 
+const verify = async (req, res, next) => {
+  const { verificationToken } = req.params;
+
+  const user = await User.findOne({ verificationToken });
+
+  if (!user) {
+    next(httpError(404, "User not found"));
+    return;
+  }
+
+  await User.findByIdAndUpdate(
+    { _id: user._id },
+    { verificationToken: null, verify: true }
+  );
+
+  res.redirect(CLIENT_URL);
+};
+
 const current = async (req, res) => {
   const { email, username } = req.user;
 
@@ -85,4 +103,5 @@ module.exports = {
   register: ctrlWallpaper(register),
   current: ctrlWallpaper(current),
   logout: ctrlWallpaper(logout),
+  verify: ctrlWallpaper(verify),
 };
