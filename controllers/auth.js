@@ -73,8 +73,16 @@ const current = async (req, res) => {
   res.status(200).json({ email, username });
 };
 
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate({ _id }, { accessToken: null });
+
+  res.status(200).json({ message: "Success" });
+};
+
 module.exports = {
   login: ctrlWallpaper(login),
   register: ctrlWallpaper(register),
   current: ctrlWallpaper(current),
+  logout: ctrlWallpaper(logout),
 };
