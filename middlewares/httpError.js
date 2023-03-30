@@ -1,4 +1,4 @@
-const message = {
+const messages = {
   400: "Bad request",
   401: "Unauthorized",
   403: "Forbidden",
@@ -7,10 +7,10 @@ const message = {
   500: "Server error",
 };
 
-const httpError = (status, message = message[status]) => {
+const httpError = (status, message = messages[status]) => {
   const error = new Error(message);
   error.status = status;
   return error;
 };
 
-module.exports = { httpError };
+module.exports = httpError;

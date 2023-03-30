@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { passwordRegex, emailRegex } = require("../helpres/regex");
+const { passwordRegex, emailRegex } = require("../helpres");
 
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
