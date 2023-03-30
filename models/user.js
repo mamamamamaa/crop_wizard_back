@@ -17,8 +17,8 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      matches: passwordRegex,
       select: false,
+      minlength: 8,
     },
     accessToken: {
       type: String,

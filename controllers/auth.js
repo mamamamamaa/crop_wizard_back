@@ -67,6 +67,15 @@ const register = async (req, res, next) => {
   });
 };
 
+const googleAuth = async (req, res) => {
+  const { user } = req;
+
+  const accessToken = generateAccessToken(user);
+  await User.findByIdAndUpdate({ _id: user._id }, { accessToken });
+
+  res.redirect(`CLIENT_URL?token=${accessToken}`);
+};
+
 const verify = async (req, res, next) => {
   const { verificationToken } = req.params;
 
@@ -104,4 +113,5 @@ module.exports = {
   current: ctrlWallpaper(current),
   logout: ctrlWallpaper(logout),
   verify: ctrlWallpaper(verify),
+  googleAuth: ctrlWallpaper(googleAuth),
 };
