@@ -67,7 +67,14 @@ const register = async (req, res, next) => {
   });
 };
 
+const current = async (req, res) => {
+  const { email, username } = req.user;
+
+  res.status(200).json({ email, username });
+};
+
 module.exports = {
   login: ctrlWallpaper(login),
   register: ctrlWallpaper(register),
+  current: ctrlWallpaper(current),
 };
