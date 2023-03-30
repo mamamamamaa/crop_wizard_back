@@ -1,10 +1,13 @@
 const { Schema, model } = require("mongoose");
-
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const { passwordRegex, emailRegex } = require("../helpres/regex");
 
 const userSchema = new Schema(
   {
-    username: String,
+    username: {
+      type: String,
+      minlength: 3,
+      maxLength: 20,
+    },
     email: {
       type: String,
       matches: emailRegex,
@@ -14,7 +17,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      minlength: 8,
+      matches: passwordRegex,
       select: false,
     },
     accessToken: {
