@@ -10,6 +10,7 @@ const app = express();
 const format = app.get("env") === "development" ? "dev" : "short";
 
 const authRouter = require("./routes/api/auth");
+const userImageRouter = require("./routes/api/userImage");
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(logger(format));
 mongoose.connect(DB);
 
 app.use("/api/auth", authRouter);
+app.use("/api/image", userImageRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

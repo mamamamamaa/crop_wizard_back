@@ -1,4 +1,4 @@
 const cloudinary = require("./cloudinary");
-const multer = require("./multer");
+const upload = require("./multer");
 
-module.exports = { multer, cloudinary };
+module.exports = { upload, cloudinary };
