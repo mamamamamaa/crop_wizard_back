@@ -13,16 +13,33 @@ const addImage = async (req, res, next) => {
 
   const { public_id, secure_url } = await cloudinary.uploader.upload(path);
 
-  const result = await Image.create({
-    url: secure_url,
-    fileName: originalname,
-    publicId: public_id,
-    owner,
-  });
+  const result = await Image.create(
+    {
+      url: secure_url,
+      fileName: originalname,
+      publicId: public_id,
+      owner,
+    },
+    "-createdAt"
+  );
 
   res.status(201).json(result);
 };
 
+const getAllUserImages = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { page, limit } = req.query;
+
+  const skip = (page - 1) * limit;
+
+  const result = await Image.find({ owner }, "-createdAt", {
+    skip,
+    limit,
+  }).populate("owner", "username email");
+  res.json(result);
+};
+
 module.exports = {
   addImage: ctrlWallpaper(addImage),
+  getAllUserImages: ctrlWallpaper(getAllUserImages),
 };
