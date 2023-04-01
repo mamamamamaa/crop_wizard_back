@@ -2,6 +2,7 @@ const { ctrlWallpaper } = require("../helpres");
 const { httpError } = require("../middlewares");
 const { cloudinary } = require("../utils");
 const { Image } = require("../models/userImage");
+
 const addImage = async (req, res, next) => {
   if (!req.file) {
     next(httpError(404, "File not found"));
@@ -20,7 +21,7 @@ const addImage = async (req, res, next) => {
       publicId: public_id,
       owner,
     },
-    "-createdAt"
+    "-createdAt -publicId"
   );
 
   res.status(201).json(result);
@@ -32,14 +33,25 @@ const getAllUserImages = async (req, res) => {
 
   const skip = (page - 1) * limit;
 
-  const result = await Image.find({ owner }, "-createdAt", {
+  const result = await Image.find({ owner }, "-createdAt -publicId", {
     skip,
     limit,
   }).populate("owner", "username email");
-  res.json(result);
+
+  res.status(200).json(result);
+};
+
+const deleteUserImage = async (req, res) => {
+  const { id: _id } = req.params;
+
+  const image = await Image.findByIdAndRemove({ _id });
+  await cloudinary.uploader.upload(image.publicId);
+
+  res.json(image);
 };
 
 module.exports = {
   addImage: ctrlWallpaper(addImage),
   getAllUserImages: ctrlWallpaper(getAllUserImages),
+  deleteUserImage: ctrlWallpaper(deleteUserImage),
 };

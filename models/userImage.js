@@ -14,7 +14,6 @@ const userImageSchema = new Schema(
     publicId: {
       type: String,
       require: true,
-      select: false,
     },
     owner: {
       type: Schema.Types.ObjectId,
