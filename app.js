@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { DB } = process.env;
+const { DB, CLIENT_URL } = process.env;
 
 const express = require("express");
 const cors = require("cors");
@@ -12,7 +12,14 @@ const format = app.get("env") === "development" ? "dev" : "short";
 const authRouter = require("./routes/api/auth");
 const userImageRouter = require("./routes/api/userImage");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", CLIENT_URL],
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(logger(format));
 
