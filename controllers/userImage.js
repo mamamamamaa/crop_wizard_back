@@ -1,6 +1,6 @@
-const { ctrlWallpaper } = require("../helpres");
-const { httpError } = require("../middlewares");
 const { cloudinary } = require("../utils");
+const { httpError } = require("../middlewares");
+const { ctrlWallpaper } = require("../helpres");
 const { Image } = require("../models/userImage");
 
 const addImage = async (req, res, next) => {
