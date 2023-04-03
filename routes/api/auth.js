@@ -12,6 +12,8 @@ router.get("/current", authenticate, ctrl.current);
 router.get("/logout", authenticate, ctrl.logout);
 
 router.get("/verify/:verificationToken", ctrl.verify);
+// TODO: reverify controller
+.get("/reverify", () => {});
 
 router.get(
   "/google",
