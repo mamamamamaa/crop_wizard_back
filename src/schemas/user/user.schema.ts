@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
-export const CatSchema = new mongoose.Schema(
+import { emailRegex } from '../../helpers/regex';
+
+export const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
