@@ -1,17 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { USER_PROVIDE } from '../../schemas/user/user.providers';
-import { Model } from 'mongoose';
-import { User } from '../../schemas/user/user.interface';
-import { CreateUserDto } from '../../schemas/user/create-user.dto';
-import { httpError } from '../../helpers/httpError';
 import bcrypt from 'bcryptjs';
-import { verificationMessage } from '../../helpers';
+import { Model } from 'mongoose';
+import { httpError, MailerHelper } from '../../helpers';
+import { Inject, Injectable } from '@nestjs/common';
+import { User } from '../../schemas/user/user.interface';
+import { USER_PROVIDE } from '../../schemas/user/user.providers';
+import { CreateUserDto } from '../../schemas/user/create-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject(USER_PROVIDE) private readonly userModel: Model<User>) {}
+  constructor(
+    private readonly mailerHelper: MailerHelper,
+    @Inject(USER_PROVIDE) private readonly userModel: Model<User>,
+  ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto) {
     try {
       const { email, password } = createUserDto;
 
@@ -23,21 +25,20 @@ export class UserService {
 
       const hashPassword = await bcrypt.hash(password, 10);
 
-      const { verificationToken, verifyMessage } = verificationMessage(email);
-      await sendMail.send(verifyMessage);
+      const verificationToken = await this.mailerHelper.verificationMessage(
+        email,
+      );
 
-      await User.create({
-        ...req.body,
+      await this.userModel.create({
+        ...createUserDto,
         password: hashPassword,
         verificationToken,
       });
 
-      res.status(201).json({
+      return {
         message: 'Verify your account by email',
         email,
-      });
-
-      return this.userModel.create(createUserDto);
+      };
     } catch (err) {
       return err;
     }

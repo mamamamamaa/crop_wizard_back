@@ -1,3 +1,3 @@
 export * from './httpError';
-export * from './verificationMessage';
+export * from './verificationMessage.providers';
 export * from './regex';
