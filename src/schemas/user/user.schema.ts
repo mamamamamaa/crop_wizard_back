@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { emailRegex } from '../../helpers';
 
 export const UserSchema = new mongoose.Schema(
   {
@@ -10,7 +9,6 @@ export const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      matches: emailRegex,
       unique: true,
       required: true,
     },

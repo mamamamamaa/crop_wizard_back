@@ -1,5 +1,3 @@
-import * as process from 'process';
-
 export default () => ({
   port: process.env.PORT,
   base_url: process.env.BASE_URL,
