@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import SendGridMail from '@sendgrid/mail';
 import { Types } from 'mongoose';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
-export class MailerHelper {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly mailerService: MailerService,
-  ) {}
-
+export class MailService {
+  private sgMail = SendGridMail.setApiKey(prcess.env.SG_API_KEY);
   async verificationMessage(email: string) {
-    const { SENDER_EMAIL, BASE_URL } = this.configService.get('app');
+    const { SENDER_EMAIL, BASE_URL } = process.env;
     const verificationToken = new Types.ObjectId();
     const verifyMessage = {
       to: email,

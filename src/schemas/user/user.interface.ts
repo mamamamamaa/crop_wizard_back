@@ -8,3 +8,10 @@ export interface User extends Document {
   readonly verificationToken: string;
   readonly verify: boolean;
 }
+
+export interface RegisterUser {
+  readonly username: string;
+  readonly email: string;
+  readonly password: string;
+  readonly verificationToken: string;
+}
