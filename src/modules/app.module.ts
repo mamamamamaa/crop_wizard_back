@@ -20,6 +20,8 @@ import { JwtModule } from '@nestjs/jwt';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticateMiddleware).forRoutes('auth/current');
+    consumer
+      .apply(AuthenticateMiddleware)
+      .forRoutes('auth/current', 'auth/logout');
   }
 }

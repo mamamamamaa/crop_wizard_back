@@ -39,4 +39,10 @@ export class AuthController {
   current(@Req() { user }) {
     return this.authService.current(user);
   }
+
+  @Get('logout')
+  logout(@Req() { user }) {
+    console.log(user);
+    return this.authService.logout(user);
+  }
 }

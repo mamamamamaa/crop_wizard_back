@@ -118,6 +118,14 @@ export class AuthService {
     return { email, username };
   }
 
+  async logout({ _id }: User) {
+    try {
+      await this.userService.updateUser(_id, { accessToken: null });
+    } catch {
+      throw new HttpException('Server error', 500);
+    }
+  }
+
   private async reverify({ email, _id }: User) {
     const verificationToken = await this.mailService.send(email);
 

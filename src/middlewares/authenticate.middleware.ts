@@ -23,9 +23,9 @@ export class AuthenticateMiddleware implements NestMiddleware {
       throw new UnauthorizedException();
     }
 
-    const secret = this.configService.get<string>('ACCESS_SECRET_KEY');
-
     try {
+      const secret = this.configService.get<string>('ACCESS_SECRET_KEY');
+
       const { _id } = await this.jwtService.verifyAsync(token, {
         secret,
       });
