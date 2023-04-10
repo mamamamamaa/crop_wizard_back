@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @Get('current')
-  current(@Req() req) {
-    console.log(req.user);
+  current(@Req() { user }) {
+    return this.authService.current(user);
   }
 }

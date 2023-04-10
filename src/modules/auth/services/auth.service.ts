@@ -114,6 +114,10 @@ export class AuthService {
     }
   }
 
+  current({ email, username }: User) {
+    return { email, username };
+  }
+
   private async reverify({ email, _id }: User) {
     const verificationToken = await this.mailService.send(email);
 
