@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Req,
   Res,
   UsePipes,
   ValidationPipe,
@@ -32,5 +33,10 @@ export class AuthController {
   @Get('verify/:verificationToken')
   verify(@Param('verificationToken') token: string, @Res() res: Response) {
     return this.authService.verify(token, res);
+  }
+
+  @Get('current')
+  current(@Req() req) {
+    console.log(req.user);
   }
 }
