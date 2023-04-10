@@ -3,15 +3,18 @@ import { UserService } from '../../user/user.service';
 import { CreateUserDto } from '../../../schemas/user/create-user.dto';
 import { MailService } from './mail.service';
 import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly mailService: MailService,
+    private readonly configService: ConfigService,
   ) {}
 
-  async signIn(userData: CreateUserDto) {
+  async signUp(userData: CreateUserDto) {
     const { email, password } = userData;
 
     const user = await this.userService.findUser('email', email);
@@ -43,13 +46,20 @@ export class AuthService {
     return { message: 'Verify your account by email', email };
   }
 
-  async verify(token: string) {
+  async verify(token: string, res: Response) {
     const user = await this.userService.findUser('verificationToken', token);
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    await
+    const clientUrl = this.configService.get<string>('CLIENT_URL');
+
+    await this.userService.updateUser(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+
+    res.redirect(clientUrl);
   }
 }
