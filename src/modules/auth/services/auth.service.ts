@@ -1,14 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserService } from '../user/user.service';
-import { CreateUserDto } from '../../schemas/user/create-user.dto';
-import { MailService } from '../mail/mail.service';
-import bcrypt from 'bcryptjs';
+import { UserService } from '../../user/user.service';
+import { CreateUserDto } from '../../../schemas/user/create-user.dto';
+import { MailService } from './mail.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private mailService: MailService,
+    private readonly userService: UserService,
+    private readonly mailService: MailService,
   ) {}
 
   async signIn(userData: CreateUserDto) {
@@ -22,7 +22,10 @@ export class AuthService {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const verificationToken = await this.mailService.verificationMessage(email);
+    const { verificationToken, mail } = await this.mailService.send(email);
+
+    console.log(mail);
+
     const stringifyToken = String(verificationToken);
 
     const payloadToRegister = {
