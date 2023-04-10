@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UsePipes,
   ValidationPipe,
@@ -15,5 +17,10 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   register(@Body() userData: CreateUserDto) {
     return this.authService.signIn(userData);
+  }
+
+  @Get('verify/:verificationToken')
+  verify(@Param('verificationToken') token: string) {
+    return this.authService.verify(token);
   }
 }

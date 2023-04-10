@@ -13,7 +13,7 @@ export class MailService {
     const senderEmail = this.configService.get<string>('SENDER_EMAIL');
     const baseUrl = this.configService.get<string>('BASE_URL');
 
-    const verificationToken = new Types.ObjectId();
+    const verificationToken = String(new Types.ObjectId());
     const verifyMessage = {
       to: email,
       from: senderEmail,
@@ -21,7 +21,9 @@ export class MailService {
       text: 'To verify your account you should click on link bellow',
       html: `<a target="_blank" href="${baseUrl}/api/auth/verify/${verificationToken}">Click verify email</a>`,
     };
-    const mail = await SendGrid.send(verifyMessage);
-    return { mail, verificationToken };
+
+    await SendGrid.send(verifyMessage);
+
+    return verificationToken;
   }
 }

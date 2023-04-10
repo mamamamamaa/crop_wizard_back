@@ -15,3 +15,12 @@ export interface RegisterUser {
   readonly password: string;
   readonly verificationToken: string;
 }
+
+export interface UserDataForUpdate {
+  readonly username?: string;
+  readonly email?: string;
+  readonly password?: string;
+  readonly accessToken?: string;
+  readonly verificationToken?: string;
+  readonly verify?: boolean;
+}
