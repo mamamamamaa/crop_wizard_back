@@ -15,15 +15,19 @@ export class UserService {
     return this.userModel.create(user);
   }
 
-  async findUser(key: string, value: string): Promise<User> {
-    return this.userModel.findOne({ [key]: value });
+  async findUser(key: string, value: string, select?: string): Promise<User> {
+    return this.userModel.findOne({ [key]: value }).select(select);
   }
 
   async findUserById(id: string): Promise<User> {
     return this.userModel.findById(id);
   }
 
-  async updateUser(id: string, newUserData: UserDataForUpdate) {
-    return this.userModel.findByIdAndUpdate(id, newUserData);
+  async updateUser(
+    id: string,
+    newUserData: UserDataForUpdate,
+    select?: string,
+  ) {
+    return this.userModel.findByIdAndUpdate(id, newUserData).select(select);
   }
 }

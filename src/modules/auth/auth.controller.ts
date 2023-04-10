@@ -9,16 +9,20 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
-import { CreateUserDto } from '../../schemas/user/create-user.dto';
+import { CreateUserDto } from '../../schemas/user/dto/create-user.dto';
 import { Response } from 'express';
-import { ConfigService } from '@nestjs/config';
+import { LoginUserDto } from '../../schemas/user/dto/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('login')
+  @UsePipes(new ValidationPipe())
+  login(@Body() userData: LoginUserDto) {
+    return this.authService.signIn(userData);
+  }
+
   @Post('register')
   @UsePipes(new ValidationPipe())
   register(@Body() userData: CreateUserDto) {
