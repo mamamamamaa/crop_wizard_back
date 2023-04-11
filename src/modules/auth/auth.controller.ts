@@ -3,6 +3,7 @@ import { AuthService } from './services/auth.service';
 import { CreateUserDto } from '../../dto/user/create-user.dto';
 import { Response } from 'express';
 import { LoginUserDto } from '../../dto/user/login-user.dto';
+import { RequestWithUser } from '../../types/req.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -24,13 +25,12 @@ export class AuthController {
   }
 
   @Get('current')
-  current(@Req() { user }) {
+  current(@Req() { user }: RequestWithUser) {
     return this.authService.current(user);
   }
 
   @Get('logout')
-  logout(@Req() { user }) {
-    console.log(user);
+  logout(@Req() { user }: RequestWithUser) {
     return this.authService.logout(user);
   }
 }

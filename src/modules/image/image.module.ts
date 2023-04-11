@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ImageService } from './image.service';
-import { ImageController } from './image.controller';
-import { CloudinaryModule } from '../../cloudinary/cloudinary.module';
+import { DatabaseModule } from '../../database/database.module';
+import { imageProviders } from '../../schemas/image/image.providers';
 
 @Module({
-  imports: [CloudinaryModule],
-  providers: [ImageService],
-  controllers: [ImageController],
+  imports: [DatabaseModule],
+  providers: [ImageService, ...imageProviders],
+  exports: [ImageService],
 })
 export class ImageModule {}
