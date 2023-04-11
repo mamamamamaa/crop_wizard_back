@@ -41,4 +41,10 @@ export class UploadService {
       'username email',
     );
   }
+
+  async deleteUserImage(publicId: string) {
+    await this.imageService.removeImage(publicId);
+
+    return await this.cloudinaryService.removeImage(publicId);
+  }
 }

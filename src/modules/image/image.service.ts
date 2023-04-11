@@ -24,4 +24,8 @@ export class ImageService {
       .find({ owner }, projection, options)
       .populate('owner', populateOptions);
   }
+
+  async removeImage(publicId: string) {
+    return this.imageModel.findOneAndRemove({ publicId });
+  }
 }

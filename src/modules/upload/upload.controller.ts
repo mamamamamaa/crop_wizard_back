@@ -1,8 +1,10 @@
 import {
   Controller,
+  Delete,
   FileTypeValidator,
   Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   Post,
   Query,
@@ -42,5 +44,10 @@ export class UploadController {
     @Query('limit') limit: number = 5,
   ) {
     return this.uploadService.getImageList(user, page, limit);
+  }
+
+  @Delete(':publicId')
+  deleteImage(@Param('publicId') publicId: string) {
+    return this.uploadService.deleteUserImage(publicId);
   }
 }
