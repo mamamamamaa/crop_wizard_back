@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IMAGE_PROVIDE } from '../../schemas/image/image.providers';
 import { Image } from '../../types/image.interface';
-import { Model } from 'mongoose';
+import { Model, QueryOptions } from 'mongoose';
 import { CreateImageDto } from '../../dto/image/create-image.dto';
 
 @Injectable()
@@ -12,5 +12,16 @@ export class ImageService {
 
   async create(data: CreateImageDto) {
     return this.imageModel.create(data);
+  }
+
+  async findUserImages(
+    owner: string,
+    projection: string,
+    options: QueryOptions<Image>,
+    populateOptions: string,
+  ) {
+    return this.imageModel
+      .find({ owner }, projection, options)
+      .populate('owner', populateOptions);
   }
 }

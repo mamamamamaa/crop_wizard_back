@@ -16,7 +16,7 @@ export interface RegisterUser {
   readonly verificationToken: string;
 }
 
-export interface UserDataForUpdate {
+export interface OptionalUserFields {
   readonly username?: string;
   readonly email?: string;
   readonly password?: string;

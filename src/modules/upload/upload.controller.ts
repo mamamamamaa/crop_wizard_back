@@ -1,9 +1,11 @@
 import {
   Controller,
   FileTypeValidator,
+  Get,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseInterceptors,
@@ -31,5 +33,14 @@ export class UploadController {
     @Req() { user }: RequestWithUser,
   ) {
     return this.uploadService.addImage(image, user);
+  }
+
+  @Get()
+  getUserImages(
+    @Req() { user }: RequestWithUser,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 5,
+  ) {
+    return this.uploadService.getImageList(user, page, limit);
   }
 }

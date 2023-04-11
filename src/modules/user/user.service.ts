@@ -2,9 +2,9 @@ import { Model } from 'mongoose';
 import { Inject, Injectable } from '@nestjs/common';
 import { USER_PROVIDE } from '../../schemas/user/user.providers';
 import {
+  OptionalUserFields,
   RegisterUser,
   User,
-  UserDataForUpdate,
 } from '../../types/user.interface';
 
 @Injectable()
@@ -15,8 +15,8 @@ export class UserService {
     return this.userModel.create(user);
   }
 
-  async findUser(key: string, value: string, select?: string): Promise<User> {
-    return this.userModel.findOne({ [key]: value }).select(select);
+  async findUser(query: OptionalUserFields, select?: string): Promise<User> {
+    return this.userModel.findOne(query).select(select);
   }
 
   async findUserById(id: string): Promise<User> {
@@ -25,7 +25,7 @@ export class UserService {
 
   async updateUser(
     id: string,
-    newUserData: UserDataForUpdate,
+    newUserData: OptionalUserFields,
     select?: string,
   ) {
     return this.userModel.findByIdAndUpdate(id, newUserData).select(select);

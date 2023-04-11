@@ -22,7 +22,7 @@ export class AuthService {
   async signIn(userData: LoginUserDto) {
     try {
       const { email, password } = userData;
-      const user = await this.userService.findUser('email', email, '+password');
+      const user = await this.userService.findUser({ email }, '+password');
 
       if (!user) {
         throw new HttpException(
@@ -65,7 +65,7 @@ export class AuthService {
     try {
       const { email, password } = userData;
 
-      const user = await this.userService.findUser('email', email);
+      const user = await this.userService.findUser({ email });
 
       if (user && user.verify) {
         throw new HttpException('Email in use', HttpStatus.BAD_REQUEST);
@@ -95,7 +95,9 @@ export class AuthService {
 
   async verify(token: string, res: Response) {
     try {
-      const user = await this.userService.findUser('verificationToken', token);
+      const user = await this.userService.findUser({
+        verificationToken: token,
+      });
 
       if (!user) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
