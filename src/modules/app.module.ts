@@ -4,6 +4,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthenticateMiddleware } from '../middlewares/authenticate.middleware';
 import { JwtModule } from '@nestjs/jwt';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
     AuthModule,
     JwtModule,
+    ImageModule,
   ],
   controllers: [],
   providers: [],
@@ -22,6 +24,6 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthenticateMiddleware)
-      .forRoutes('auth/current', 'auth/logout');
+      .forRoutes('auth/current', 'auth/logout', 'image');
   }
 }
