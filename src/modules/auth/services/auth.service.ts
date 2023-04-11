@@ -9,6 +9,7 @@ import { LoginUserDto } from '../../../dto/user/login-user.dto';
 import { CreateUserDto } from '../../../dto/user/create-user.dto';
 import { UserService } from '../../user/user.service';
 import { User } from '../../../types/user.interface';
+import { RequestWithUser } from '../../../types/req.interface';
 
 @Injectable()
 export class AuthService {
@@ -126,6 +127,10 @@ export class AuthService {
     } catch {
       throw new HttpException('Server error', 500);
     }
+  }
+
+  async googleLogin(req: RequestWithUser) {
+    return req.user;
   }
 
   private async reverify({ email, _id }: User) {

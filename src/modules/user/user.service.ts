@@ -16,7 +16,7 @@ export class UserService {
   }
 
   async findUser(query: OptionalUserFields, select?: string): Promise<User> {
-    return this.userModel.findOne(query).select(select);
+    return this.userModel.findOne(query).select(select || '');
   }
 
   async findUserById(id: string): Promise<User> {

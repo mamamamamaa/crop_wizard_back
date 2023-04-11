@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Param, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './services/auth.service';
 import { CreateUserDto } from '../../dto/user/create-user.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { LoginUserDto } from '../../dto/user/login-user.dto';
 import { RequestWithUser } from '../../types/req.interface';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -32,5 +42,15 @@ export class AuthController {
   @Get('logout')
   logout(@Req() { user }: RequestWithUser) {
     return this.authService.logout(user);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req: Request) {}
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req: RequestWithUser) {
+    return this.authService.googleLogin(req);
   }
 }

@@ -13,7 +13,8 @@ export interface RegisterUser {
   readonly username: string;
   readonly email: string;
   readonly password: string;
-  readonly verificationToken: string;
+  readonly verificationToken?: string;
+  readonly verify?: boolean;
 }
 
 export interface OptionalUserFields {
