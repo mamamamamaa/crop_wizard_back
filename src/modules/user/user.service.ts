@@ -1,11 +1,11 @@
 import { Model } from 'mongoose';
 import { Inject, Injectable } from '@nestjs/common';
+import { USER_PROVIDE } from '../../schemas/user/user.providers';
 import {
   RegisterUser,
   User,
   UserDataForUpdate,
-} from '../../schemas/user/user.interface';
-import { USER_PROVIDE } from '../../schemas/user/user.providers';
+} from '../../types/user.interface';
 
 @Injectable()
 export class UserService {

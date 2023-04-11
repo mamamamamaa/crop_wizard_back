@@ -5,10 +5,10 @@ import { ConfigService } from '@nestjs/config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { MailService } from './mail.service';
+import { LoginUserDto } from '../../../dto/user/login-user.dto';
+import { CreateUserDto } from '../../../dto/user/create-user.dto';
 import { UserService } from '../../user/user.service';
-import { User } from '../../../schemas/user/user.interface';
-import { LoginUserDto } from '../../../schemas/user/dto/login-user.dto';
-import { CreateUserDto } from '../../../schemas/user/dto/create-user.dto';
+import { User } from '../../../types/user.interface';
 
 @Injectable()
 export class AuthService {

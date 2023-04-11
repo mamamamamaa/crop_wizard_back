@@ -1,6 +1,7 @@
 import {
   Controller,
   Post,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -13,7 +14,7 @@ export class ImageController {
 
   @Post()
   @UseInterceptors(FileInterceptor('image'))
-  addImage(@UploadedFile() image: Express.Multer.File) {
-    console.log(image);
+  addImage(@UploadedFile() image: Express.Multer.File, @Req() req) {
+    return this.imageService.addImage(image, req.user);
   }
 }
