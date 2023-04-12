@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../../user/user.service';
 import { Types } from 'mongoose';
+import { Request } from 'express';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -21,16 +22,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
   async validate(
+    req: Request,
     accessToken: string,
     refreshToken: string,
     profile: any,
     done: (error: any, user?: any, info?: any) => void,
   ): Promise<any> {
     try {
-      const { email, displayName } = profile;
-
-      console.log('here');
-      console.log(profile);
+      const { emails, displayName } = profile;
+      const { value: email } = emails[0];
 
       const user = await this.userService.findUser({ email });
 

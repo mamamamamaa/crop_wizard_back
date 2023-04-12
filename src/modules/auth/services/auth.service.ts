@@ -13,12 +13,21 @@ import { RequestWithUser } from '../../../types/req.interface';
 
 @Injectable()
 export class AuthService {
+  private readonly jwtOptions: { secret: string; expiresIn: string };
+  private readonly clientUrl: string;
   constructor(
     private readonly userService: UserService,
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    this.jwtOptions = {
+      secret: this.configService.get<string>('ACCESS_SECRET_KEY'),
+      expiresIn: this.configService.get<string>('EXPIRES_IN'),
+    };
+
+    this.clientUrl = this.configService.get<string>('CLIENT_URL');
+  }
 
   async signIn(userData: LoginUserDto) {
     try {
@@ -46,13 +55,11 @@ export class AuthService {
       }
 
       const payload = { _id: user._id };
-      const secret = this.configService.get<string>('ACCESS_SECRET_KEY');
-      const expiresIn = this.configService.get<string>('EXPIRES_IN');
 
-      const accessToken = await this.jwtService.signAsync(payload, {
-        secret,
-        expiresIn,
-      });
+      const accessToken = await this.jwtService.signAsync(
+        payload,
+        this.jwtOptions,
+      );
 
       await this.userService.updateUser(user._id, { accessToken });
 
@@ -104,14 +111,12 @@ export class AuthService {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       }
 
-      const clientUrl = this.configService.get<string>('CLIENT_URL');
-
       await this.userService.updateUser(user._id, {
         verify: true,
         verificationToken: null,
       });
 
-      res.redirect(clientUrl);
+      res.redirect(this.clientUrl);
     } catch {
       throw new HttpException('Server error', 500);
     }
@@ -129,8 +134,19 @@ export class AuthService {
     }
   }
 
-  async googleLogin(req: RequestWithUser) {
-    return req.user;
+  async googleLogin(req: RequestWithUser, res: Response) {
+    const { _id } = req.user;
+
+    const payload = { _id };
+
+    const accessToken = await this.jwtService.signAsync(
+      payload,
+      this.jwtOptions,
+    );
+
+    const user = await this.userService.updateUser(_id, { accessToken });
+
+    res.redirect(`${this.clientUrl}?token=${accessToken}`);
   }
 
   private async reverify({ email, _id }: User) {
