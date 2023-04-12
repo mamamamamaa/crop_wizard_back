@@ -2,8 +2,11 @@
   "name": "crop_wizard_back",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "mamamamamaa",
   "private": true,
+  "engines": {
+    "node": ">=14 <15"
+  },
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
