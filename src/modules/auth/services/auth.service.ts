@@ -144,9 +144,23 @@ export class AuthService {
       this.jwtOptions,
     );
 
-    const user = await this.userService.updateUser(_id, { accessToken });
+    const user = await this.userService.updateUser(
+      _id,
+      { accessToken },
+      '-verificationToken -verify -updatedAt -createdAt',
+    );
 
-    res.redirect(`${this.clientUrl}?token=${accessToken}`);
+    const cookieOptions = {
+      httpOnly: true,
+      maxAge: 3600000,
+    };
+
+    const stringifyUser = JSON.stringify(user);
+
+    res.cookie('user', stringifyUser, cookieOptions);
+    res.cookie('accessToken', accessToken, cookieOptions);
+
+    res.redirect(this.clientUrl);
   }
 
   private async reverify({ email, _id }: User) {
