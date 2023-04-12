@@ -5,6 +5,9 @@
 #ENV
 .env
 
+#LOCK
+package-lock.json
+
 # Logs
 logs
 *.log
