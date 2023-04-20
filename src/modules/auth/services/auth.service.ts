@@ -151,7 +151,7 @@ export class AuthService {
     );
 
     const cookieOptions = {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 3600000,
     };
 
