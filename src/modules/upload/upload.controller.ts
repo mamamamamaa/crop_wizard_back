@@ -40,8 +40,8 @@ export class UploadController {
   @Get()
   getUserImages(
     @Req() { user }: RequestWithUser,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 5,
+    @Query('page') page = 1,
+    @Query('limit') limit = 5,
   ) {
     return this.uploadService.getImageList(user, page, limit);
   }

@@ -147,7 +147,7 @@ export class AuthService {
     const user = await this.userService.updateUser(
       _id,
       { accessToken },
-      '-verificationToken -verify -updatedAt -createdAt',
+      '-verificationToken -accessToken -verify -updatedAt -createdAt',
     );
 
     const cookieOptions = {
@@ -159,7 +159,6 @@ export class AuthService {
 
     res.cookie('user', stringifyUser, cookieOptions);
     res.cookie('accessToken', accessToken, cookieOptions);
-
     res.redirect(this.clientUrl);
   }
 

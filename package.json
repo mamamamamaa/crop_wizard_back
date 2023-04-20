@@ -4,10 +4,10 @@
   "description": "",
   "author": "mamamamamaa",
   "private": true,
+  "license": "UNLICENSED",
   "engines": {
     "node": ">=14 <15"
   },
-  "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
