@@ -29,7 +29,7 @@ export class AuthService {
     this.clientUrl = this.configService.get<string>('CLIENT_URL');
   }
 
-  async signIn(userData: LoginUserDto) {
+  async signIn(userData: LoginUserDto, res: Response) {
     try {
       const { email, password } = userData;
       const user = await this.userService.findUser({ email }, '+password');
@@ -62,8 +62,12 @@ export class AuthService {
       );
 
       await this.userService.updateUser(user._id, { accessToken });
+      const userJson = JSON.stringify({ username: user.username, email });
 
-      return { username: user.username, email, accessToken };
+      res.header('Authorization', `Bearer ${accessToken}`);
+      res.header('X-User-Data', userJson);
+
+      return;
     } catch (err) {
       throw new HttpException('Server error', 500);
     }
@@ -150,16 +154,26 @@ export class AuthService {
       '-verificationToken -accessToken -verify -updatedAt -createdAt',
     );
 
-    const cookieOptions = {
-      httpOnly: false,
-      maxAge: 3600000,
-    };
+    // Variant with cookies
+    // const cookieOptions = {
+    //   httpOnly: false,
+    //   maxAge: 3600000,
+    // };
+    //
+    // res.header('user', stringifyUser, cookieOptions);
+    // res.cookie('accessToken', accessToken, cookieOptions);
 
-    const stringifyUser = JSON.stringify(user);
+    const userJson = JSON.stringify({
+      username: user.username,
+      email: user.email,
+    });
 
-    res.cookie('user', stringifyUser, cookieOptions);
-    res.cookie('accessToken', accessToken, cookieOptions);
-    res.redirect(this.clientUrl);
+    // res.header('Authorization', `Bearer ${accessToken}`);
+    // res.header('X-User-Data', userJson);
+
+    res.redirect(
+      `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
+    );
   }
 
   private async reverify({ email, _id }: User) {

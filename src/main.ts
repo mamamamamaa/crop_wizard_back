@@ -24,6 +24,7 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
     preflightContinue: false,
     optionsSuccessStatus: 204,
+    credentials: true,
   });
 
   await app.listen(port);
