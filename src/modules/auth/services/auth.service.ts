@@ -154,26 +154,27 @@ export class AuthService {
       '-verificationToken -accessToken -verify -updatedAt -createdAt',
     );
 
-    // Variant with cookies
-    // const cookieOptions = {
-    //   httpOnly: false,
-    //   maxAge: 3600000,
-    // };
-    //
-    // res.header('user', stringifyUser, cookieOptions);
-    // res.cookie('accessToken', accessToken, cookieOptions);
-
     const userJson = JSON.stringify({
       username: user.username,
       email: user.email,
     });
 
+    const cookieOptions = {
+      httpOnly: false,
+      maxAge: 3600000,
+    };
+
+    res.cookie('user', userJson, cookieOptions);
+    res.cookie('accessToken', accessToken, cookieOptions);
+
     // res.header('Authorization', `Bearer ${accessToken}`);
     // res.header('X-User-Data', userJson);
 
-    res.redirect(
-      `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
-    );
+    // res.redirect(
+    //   `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
+    // );
+
+    res.redirect(this.clientUrl);
   }
 
   private async reverify({ email, _id }: User) {
