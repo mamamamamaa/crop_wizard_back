@@ -154,29 +154,33 @@ export class AuthService {
       '-verificationToken -accessToken -verify -updatedAt -createdAt',
     );
 
-    const cookieOptions = {
-      httpOnly: false,
-      maxAge: 3600000,
-    };
+    // <========= Cookie ==========>
+
+    // const cookieOptions = {
+    //   httpOnly: false,
+    //   maxAge: 3600000,
+    // };
+
+    // const userJson = JSON.stringify({
+    //   username: user.username,
+    //   email: user.email,
+    // });
+
+    // res.cookie('user', userJson, cookieOptions);
+    // res.cookie('accessToken', accessToken, cookieOptions);
+    //
+    // res.redirect(this.clientUrl);
+
+    // </========= Cookie ==========>
 
     const userJson = JSON.stringify({
       username: user.username,
       email: user.email,
     });
 
-    res.cookie('user', userJson, cookieOptions);
-    res.cookie('accessToken', accessToken, cookieOptions);
-
-    res.redirect(this.clientUrl);
-
-    // const userJson = JSON.stringify({
-    //   username: user.username,
-    //   email: user.email,
-    // });
-    //
-    // res.redirect(
-    //   `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
-    // );
+    res.redirect(
+      `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
+    );
   }
 
   private async reverify({ email, _id }: User) {
