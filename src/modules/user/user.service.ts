@@ -1,15 +1,21 @@
 import { Model } from 'mongoose';
 import { Inject, Injectable } from '@nestjs/common';
-import { USER_PROVIDE } from '../../schemas/user/user.providers';
+import { generateFromString } from 'generate-avatar';
+
 import {
   OptionalUserFields,
   RegisterUser,
   User,
 } from '../../types/user.interface';
+import { USER_PROVIDE } from '../../schemas/user/user.providers';
 
 @Injectable()
 export class UserService {
   constructor(@Inject(USER_PROVIDE) private readonly userModel: Model<User>) {}
+
+  getAvatarUrl(email: string): string {
+    return generateFromString(email);
+  }
 
   async createUser(user: RegisterUser): Promise<User> {
     return this.userModel.create(user);

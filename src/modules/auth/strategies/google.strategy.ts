@@ -29,7 +29,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: (error: any, user?: any, info?: any) => void,
   ): Promise<any> {
     try {
-      const { emails, displayName } = profile;
+      const { emails, displayName, picture } = profile;
       const { value: email } = emails[0];
 
       const user = await this.userService.findUser({ email });
@@ -48,7 +48,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         password: hashPassword,
         verificationToken: null,
         verify: true,
+        avatarUrl: picture,
       });
+
+      console.log(newUser);
 
       done(null, newUser);
     } catch (error) {

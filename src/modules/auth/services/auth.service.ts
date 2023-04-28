@@ -29,7 +29,7 @@ export class AuthService {
     this.clientUrl = this.configService.get<string>('CLIENT_URL');
   }
 
-  async signIn(userData: LoginUserDto, res: Response) {
+  async signIn(userData: LoginUserDto) {
     try {
       const { email, password } = userData;
       const user = await this.userService.findUser({ email }, '+password');
@@ -62,12 +62,15 @@ export class AuthService {
       );
 
       await this.userService.updateUser(user._id, { accessToken });
-      const userJson = JSON.stringify({ username: user.username, email });
 
-      res.header('Authorization', `Bearer ${accessToken}`);
-      res.header('X-User-Data', userJson);
-
-      return;
+      return {
+        accessToken,
+        user: {
+          username: user.username,
+          email: user.email,
+          avatarUrl: user.avatarUrl,
+        },
+      };
     } catch (err) {
       throw new HttpException('Server error', 500);
     }
@@ -91,10 +94,13 @@ export class AuthService {
 
       const verificationToken = await this.mailService.send(email);
 
+      const avatarUrl = this.userService.getAvatarUrl(email);
+
       const payloadToRegister = {
         ...userData,
         password: hashPassword,
         verificationToken,
+        avatarUrl,
       };
 
       await this.userService.createUser(payloadToRegister);
@@ -115,12 +121,28 @@ export class AuthService {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       }
 
+      const payload = { _id: user._id };
+
+      const accessToken = await this.jwtService.signAsync(
+        payload,
+        this.jwtOptions,
+      );
+
       await this.userService.updateUser(user._id, {
         verify: true,
         verificationToken: null,
+        accessToken,
       });
 
-      res.redirect(this.clientUrl);
+      const userJson = JSON.stringify({
+        username: user.username,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+      });
+
+      res.redirect(
+        `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
+      );
     } catch {
       throw new HttpException('Server error', 500);
     }
@@ -176,6 +198,7 @@ export class AuthService {
     const userJson = JSON.stringify({
       username: user.username,
       email: user.email,
+      avatarUrl: user.avatarUrl,
     });
 
     res.redirect(

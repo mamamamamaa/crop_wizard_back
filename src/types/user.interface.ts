@@ -7,6 +7,7 @@ export interface User extends Document {
   readonly accessToken: string;
   readonly verificationToken: string;
   readonly verify: boolean;
+  readonly avatarUrl: string;
 }
 
 export interface RegisterUser {
@@ -15,6 +16,7 @@ export interface RegisterUser {
   readonly password: string;
   readonly verificationToken?: string;
   readonly verify?: boolean;
+  readonly avatarUrl: string;
 }
 
 export interface OptionalUserFields {
@@ -24,4 +26,5 @@ export interface OptionalUserFields {
   readonly accessToken?: string;
   readonly verificationToken?: string;
   readonly verify?: boolean;
+  readonly avatarUrl?: string;
 }

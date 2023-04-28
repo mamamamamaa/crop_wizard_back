@@ -7,6 +7,9 @@ export const UserSchema = new mongoose.Schema(
       minlength: 3,
       maxLength: 20,
     },
+    avatarUrl: {
+      type: String,
+    },
     email: {
       type: String,
       unique: true,

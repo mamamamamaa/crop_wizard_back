@@ -20,8 +20,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  login(@Body() userData: LoginUserDto, @Res() res: Response) {
-    return this.authService.signIn(userData, res);
+  login(@Body() userData: LoginUserDto) {
+    return this.authService.signIn(userData);
   }
 
   @Post('register')
