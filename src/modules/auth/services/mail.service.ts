@@ -23,10 +23,10 @@ export class MailService {
         html: `<a target="_blank" href="${baseUrl}/api/auth/verify/${verificationToken}">Click verify email</a>`,
       };
 
-      await SendGrid.send(verifyMessage);
+      console.log(await SendGrid.send(verifyMessage));
 
       return verificationToken;
-    } catch {
+    } catch (error) {
       throw new HttpException('Server error', 500);
     }
   }
