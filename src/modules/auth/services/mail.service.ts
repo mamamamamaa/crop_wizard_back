@@ -23,7 +23,7 @@ export class MailService {
         html: `<a target="_blank" href="${baseUrl}/api/auth/verify/${verificationToken}">Click verify email</a>`,
       };
 
-      console.log(await SendGrid.send(verifyMessage));
+      await SendGrid.send(verifyMessage);
 
       return verificationToken;
     } catch (error) {
