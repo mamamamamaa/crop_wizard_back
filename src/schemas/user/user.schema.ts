@@ -9,6 +9,7 @@ export const UserSchema = new mongoose.Schema(
     },
     avatarUrl: {
       type: String,
+      default: null,
     },
     email: {
       type: String,
