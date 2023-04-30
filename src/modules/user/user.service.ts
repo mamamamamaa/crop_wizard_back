@@ -14,8 +14,10 @@ export class UserService {
 
   constructor(@Inject(USER_PROVIDE) private readonly userModel: Model<User>) {}
 
-  getAvatarUrl(email: string): string {
-    return this.generator.generateRandomAvatar();
+  getAvatarUrl(): string {
+    const seed = Math.random().toString(36).substring(7); // Generate a random seed
+
+    return `https://api.dicebear.com/6.x/adventurer/png?seed=${seed}`;
   }
 
   async createUser(user: RegisterUser): Promise<User> {

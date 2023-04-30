@@ -94,7 +94,7 @@ export class AuthService {
 
       const verificationToken = await this.mailService.send(email);
 
-      const avatarUrl = this.userService.getAvatarUrl(email);
+      const avatarUrl = this.userService.getAvatarUrl();
 
       const payloadToRegister = {
         ...userData,
