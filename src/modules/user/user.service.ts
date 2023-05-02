@@ -1,6 +1,5 @@
 import { Model } from 'mongoose';
 import { Inject, Injectable } from '@nestjs/common';
-import { AvatarGenerator } from 'random-avatar-generator';
 import {
   OptionalUserFields,
   RegisterUser,
@@ -10,8 +9,6 @@ import { USER_PROVIDE } from '../../schemas/user/user.providers';
 
 @Injectable()
 export class UserService {
-  private readonly generator = new AvatarGenerator();
-
   constructor(@Inject(USER_PROVIDE) private readonly userModel: Model<User>) {}
 
   getAvatarUrl(): string {
