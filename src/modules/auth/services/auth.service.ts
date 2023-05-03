@@ -106,40 +106,36 @@ export class AuthService {
   }
 
   async verify(token: string, res: Response) {
-    try {
-      const user = await this.userService.findUser({
-        verificationToken: token,
-      });
+    const user = await this.userService.findUser({
+      verificationToken: token,
+    });
 
-      if (!user) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      }
-
-      const payload = { _id: user._id };
-
-      const accessToken = await this.jwtService.signAsync(
-        payload,
-        this.jwtOptions,
-      );
-
-      await this.userService.updateUser(user._id, {
-        verify: true,
-        verificationToken: null,
-        accessToken,
-      });
-
-      const userJson = JSON.stringify({
-        username: user.username,
-        email: user.email,
-        avatarUrl: user.avatarUrl,
-      });
-
-      res.redirect(
-        `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
-      );
-    } catch {
-      throw new HttpException('Server error', 500);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
+
+    const payload = { _id: user._id };
+
+    const accessToken = await this.jwtService.signAsync(
+      payload,
+      this.jwtOptions,
+    );
+
+    await this.userService.updateUser(user._id, {
+      verify: true,
+      verificationToken: null,
+      accessToken,
+    });
+
+    const userJson = JSON.stringify({
+      username: user.username,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+    });
+
+    res.redirect(
+      `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
+    );
   }
 
   current({ email, username }: User) {
