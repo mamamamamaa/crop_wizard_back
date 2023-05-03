@@ -27,6 +27,7 @@ export class MailService {
 
       return verificationToken;
     } catch (error) {
+      console.log(error)
       throw new HttpException('Server error', 500);
     }
   }

@@ -30,50 +30,44 @@ export class AuthService {
   }
 
   async signIn(userData: LoginUserDto) {
-    try {
-      const { email, password } = userData;
-      const user = await this.userService.findUser({ email }, '+password');
+    const { email, password } = userData;
 
-      if (!user) {
-        throw new HttpException(
-          'Invalid email or password',
-          HttpStatus.CONFLICT,
-        );
-      }
+    const user = await this.userService.findUser({ email }, '+password');
 
-      const comparePassword = await bcrypt.compare(password, user.password);
-
-      if (!comparePassword) {
-        throw new HttpException(
-          'Invalid email or password',
-          HttpStatus.CONFLICT,
-        );
-      }
-
-      if (!user.verify) {
-        return this.reverify(user);
-      }
-
-      const payload = { _id: user._id };
-
-      const accessToken = await this.jwtService.signAsync(
-        payload,
-        this.jwtOptions,
+    if (!user) {
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.NOT_FOUND,
       );
-
-      await this.userService.updateUser(user._id, { accessToken });
-
-      return {
-        accessToken,
-        user: {
-          username: user.username,
-          email: user.email,
-          avatarUrl: user.avatarUrl,
-        },
-      };
-    } catch (err) {
-      throw new HttpException('Server error', 500);
     }
+
+    const comparePassword = await bcrypt.compare(password, user.password);
+
+    if (!comparePassword) {
+      throw new HttpException('Invalid email or password', HttpStatus.CONFLICT);
+    }
+
+    if (!user.verify) {
+      return this.reverify(user);
+    }
+
+    const payload = { _id: user._id };
+
+    const accessToken = await this.jwtService.signAsync(
+      payload,
+      this.jwtOptions,
+    );
+
+    await this.userService.updateUser(user._id, { accessToken });
+
+    return {
+      accessToken,
+      user: {
+        username: user.username,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+      },
+    };
   }
 
   async signUp(userData: CreateUserDto) {
