@@ -138,8 +138,8 @@ export class AuthService {
     );
   }
 
-  current({ email, username }: User) {
-    return { email, username };
+  current({ email, username, avatarUrl }: User) {
+    return { email, username, avatarUrl };
   }
 
   async logout({ _id }: User) {
