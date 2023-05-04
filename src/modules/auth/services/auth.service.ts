@@ -127,15 +127,7 @@ export class AuthService {
       accessToken,
     });
 
-    const userJson = JSON.stringify({
-      username: user.username,
-      email: user.email,
-      avatarUrl: user.avatarUrl,
-    });
-
-    res.redirect(
-      `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
-    );
+    res.redirect(`${this.clientUrl}?accessToken=${accessToken}`);
   }
 
   current({ email, username, avatarUrl }: User) {
@@ -160,7 +152,7 @@ export class AuthService {
       this.jwtOptions,
     );
 
-    const user = await this.userService.updateUser(
+    await this.userService.updateUser(
       _id,
       { accessToken },
       '-verificationToken -accessToken -verify -updatedAt -createdAt',
@@ -185,15 +177,7 @@ export class AuthService {
 
     // </========= Cookie ==========>
 
-    const userJson = JSON.stringify({
-      username: user.username,
-      email: user.email,
-      avatarUrl: user.avatarUrl,
-    });
-
-    res.redirect(
-      `${this.clientUrl}?accessToken=${accessToken}&user=${userJson}`,
-    );
+    res.redirect(`${this.clientUrl}?accessToken=${accessToken}`);
   }
 
   private async reverify({ email, _id }: User) {
