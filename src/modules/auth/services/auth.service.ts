@@ -72,7 +72,7 @@ export class AuthService {
 
   async signUp(userData: CreateUserDto) {
     try {
-      const { email, password } = userData;
+      const { email, password, username } = userData;
 
       const user = await this.userService.findUser({ email });
 
@@ -99,7 +99,7 @@ export class AuthService {
 
       await this.userService.createUser(payloadToRegister);
 
-      return { message: 'Verify your account by email', email };
+      return { message: 'Verify your account by email', email, username };
     } catch {
       throw new HttpException('Server error', 500);
     }
