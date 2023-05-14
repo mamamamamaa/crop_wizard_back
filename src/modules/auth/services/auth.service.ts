@@ -48,7 +48,7 @@ export class AuthService {
     }
 
     if (!user.verify) {
-      return this.reverify(user);
+      return this.resendVerificationMessage(user);
     }
 
     const payload = { _id: user._id };
@@ -81,7 +81,7 @@ export class AuthService {
       }
 
       if (user && !user.verify) {
-        return this.reverify(user);
+        return this.resendVerificationMessage(user);
       }
 
       const hashPassword = await bcrypt.hash(password, 10);
@@ -128,6 +128,20 @@ export class AuthService {
     });
 
     res.redirect(`${this.clientUrl}?accessToken=${accessToken}`);
+  }
+
+  async reverify(email: string) {
+    const user = await this.userService.findUser({ email });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    if (user.verify) {
+      throw new HttpException('User already verified', HttpStatus.NOT_FOUND);
+    }
+
+    return this.resendVerificationMessage(user);
   }
 
   current({ email, username, avatarUrl }: User) {
@@ -180,7 +194,7 @@ export class AuthService {
     res.redirect(`${this.clientUrl}?accessToken=${accessToken}`);
   }
 
-  private async reverify({ email, _id }: User) {
+  private async resendVerificationMessage({ email, _id }: User) {
     const verificationToken = await this.mailService.send(email);
 
     await this.userService.updateUser(_id, { verificationToken });

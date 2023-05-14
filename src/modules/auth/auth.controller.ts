@@ -14,6 +14,7 @@ import { Request, Response } from 'express';
 import { LoginUserDto } from '../../dto/user/login-user.dto';
 import { RequestWithUser } from '../../types/req.interface';
 import { AuthGuard } from '@nestjs/passport';
+import { ReverifyUserDto } from '../../dto/user/reverify-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -32,6 +33,11 @@ export class AuthController {
   @Get('verify/:verificationToken')
   verify(@Param('verificationToken') token: string, @Res() res: Response) {
     return this.authService.verify(token, res);
+  }
+
+  @Post('reverify')
+  reverify(@Body() { email }: ReverifyUserDto) {
+    return this.authService.reverify(email);
   }
 
   @Get('current')
